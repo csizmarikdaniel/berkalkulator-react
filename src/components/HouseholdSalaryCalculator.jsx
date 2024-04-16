@@ -6,7 +6,7 @@ const HouseholdSalaryCalculator = () => {
   return (
     <>
       <header>
-        <FamilyMemberTabs />
+        <FamilyMemberTabs names={["tom", "james"]} />
       </header>
       <main>
         <SalaryCalculator />

@@ -7,8 +7,8 @@ _Kliensoldali webprogramozás 1. beadandó 2023-24-2_
 Kérlek, töltsétek ki az adataitokkal beadás előtt!
 
 ```txt
-<Hallgató neve>
-<Neptun kódja>
+<Csizmarik Dániel>
+<IC5JV5>
 Kliensoldali webprogramozás - beadandó
 Ezt a megoldást a fent írt hallgató küldte be és készítette a Kliensoldali webprogramozás kurzus számonkéréséhez.
 Kijelentem, hogy ez a megoldás a saját munkám. Nem másoltam vagy használtam harmadik féltől
@@ -26,7 +26,7 @@ Kérlek, beadás előtt töltsétek ki, hogy mely részfeladatokat oldottátok m
 
 ```txt
 -[ ] Az alkalmazás legalább 4 komponensből áll. (Enélkül a beadandót nem fogadjuk el.) (1pt)
-Tehát léteznek a következő komponensek:  
+Tehát léteznek a következő komponensek:
   - Szöveges beviteli mező címkével
   - Egyedi beviteli komponens, mellyel az kedvezményezett eltartottak és a nem kedvezményezett eltartottak számát tudjuk megadni
   - Friss házasokra megadására vonatkozó komponens.
