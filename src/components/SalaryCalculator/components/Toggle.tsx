@@ -1,6 +1,14 @@
+import React, { FC } from "react";
 import * as Switch from "@radix-ui/react-switch";
 
-const Toggle = ({ label, name, checked, onChange }) => (
+type ToggleProps = {
+  label: string;
+  name: string;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+};
+
+const Toggle: FC<ToggleProps> = ({ label, name, checked, onChange }) => (
   <div>
     <label htmlFor={name}>{label}</label>
     <Switch.Root id={name} checked={checked} onCheckedChange={onChange}>

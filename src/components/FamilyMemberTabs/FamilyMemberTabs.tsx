@@ -1,8 +1,18 @@
+import React, { FC } from "react";
+
 import TabContainer from "./components/TabContainer";
 import Tab from "./components/Tab";
 import AddNewButton from "./components/AddNewButton";
 
-const FamilyMemberTabs = ({ names, addNewMember }) => {
+type FamilyMember = {
+  id: number;
+  name: string;
+};
+
+const FamilyMemberTabs: FC<{
+  names: FamilyMember[];
+  addNewMember: () => void;
+}> = ({ names, addNewMember }) => {
   return (
     <div>
       <TabContainer>

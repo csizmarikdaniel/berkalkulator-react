@@ -1,6 +1,6 @@
-import React from "react";
+import React, { FC } from "react";
 
-const TabContainer = ({ children }) => {
+const TabContainer: FC<{ children: React.ReactNode }> = ({ children }) => {
   return <div className="flex flex-row">{children}</div>;
 };
 

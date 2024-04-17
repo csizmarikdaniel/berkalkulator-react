@@ -1,6 +1,6 @@
-import React from "react";
+import React, { FC } from "react";
 
-const Tab = ({ children }) => {
+const Tab: FC<{ children: React.ReactNode }> = ({ children }) => {
   return <div className="m-1 px-2 border">{children}</div>;
 };
 

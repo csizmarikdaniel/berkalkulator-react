@@ -1,3 +1,4 @@
+import React from "react";
 import HouseholdSalaryCalculator from "./components/HouseholdSalaryCalculator";
 
 function App() {
