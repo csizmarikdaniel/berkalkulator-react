@@ -1,23 +1,23 @@
-import React, { FC } from "react";
-import { useState } from "react";
+import React, { FC, useState } from "react";
 
 import Input from "./components/Input";
 import Toggle from "./components/Toggle";
 
 const SalaryCalculator: FC<{ index: number }> = ({ index }) => {
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState(true);
+  const [brutto, setBrutto] = useState("");
   return (
-    <div>
+    <form>
       SalaryCalculator
       <p>{index}</p>
-      <Input label="Bruttó bér" type="number" value="" />
+      <Input label="Bruttó bér" type="number" />
       <Toggle
-        checked={toggle}
-        onChange={setToggle}
         label="Toggle"
         name="toggle"
+        checked={toggle}
+        onChange={() => setToggle(!toggle)}
       />
-    </div>
+    </form>
   );
 };
 
