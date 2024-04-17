@@ -7,13 +7,19 @@ import { familyMembers as members } from "../../domain/familyMembers";
 
 const HouseholdSalaryCalculator = () => {
   const [familyMembers, setFamilyMembers] = useState(members);
+  const [activeMember, setActiveMember] = useState(1);
   const addNewMember = () => {
-    console.log("Új tag hozzáadása");
     const newMember = {
       id: familyMembers.length + 1,
       name: `Tag ${familyMembers.length + 1}`,
+      brutto: 0,
+      szja: false,
+      friss_hazas: false,
+      szemelyi_kedvezmeny: false,
+      csaladi_kedvezmeny: false,
     };
     setFamilyMembers([...familyMembers, newMember]);
+    setActiveMember(newMember.id);
   };
   return (
     <>
@@ -21,10 +27,13 @@ const HouseholdSalaryCalculator = () => {
         <FamilyMemberTabs
           names={familyMembers}
           addNewMember={() => addNewMember()}
+          setActiveMember={setActiveMember}
         />
       </header>
       <main>
-        <SalaryCalculator index={familyMembers.length} />
+        <SalaryCalculator
+          member={familyMembers.find((member) => member.id == activeMember)}
+        />
         <HouseholdSummary />
       </main>
     </>

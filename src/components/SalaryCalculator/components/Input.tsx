@@ -5,16 +5,12 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   error?: string | undefined;
 };
 
-const Input: FC<InputProps> = ({ label, type, value, onChange }) => {
+const Input: FC<InputProps> = ({ label, error, ...props }) => {
   return (
     <div>
-      <label>{label}</label>
-      <input
-        type={type}
-        value={value}
-        onChange={onChange}
-        className="input input-bordered"
-      />
+      <label className="label">{label}</label>
+      <input className="input input-bordered" {...props} />
+      {error && <p className="text-red-600">{error}</p>}
     </div>
   );
 };
