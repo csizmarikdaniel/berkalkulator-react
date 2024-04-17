@@ -1,9 +1,9 @@
 import React from "react";
 
-const AddNewButton = () => {
+const AddNewButton = ({ addNewTab }) => {
   return (
-    <div className="">
-      <button>+</button>
+    <div className="m-1 px-2 border">
+      <button onClick={addNewTab}>+</button>
     </div>
   );
 };
