@@ -21,18 +21,28 @@ const HouseholdSalaryCalculator = () => {
     setFamilyMembers([...familyMembers, newMember]);
     setActiveMember(newMember.id);
   };
+
+  const updateMember = (member) => {
+    const updatedMembers = familyMembers.map((m) =>
+      m.id === member.id ? member : m
+    );
+    setFamilyMembers(updatedMembers);
+    console.log(updatedMembers);
+  };
   return (
     <>
       <header>
         <FamilyMemberTabs
-          names={familyMembers}
+          members={familyMembers}
+          activeMember={activeMember}
           addNewMember={() => addNewMember()}
           setActiveMember={setActiveMember}
         />
       </header>
       <main>
         <SalaryCalculator
-          member={familyMembers.find((member) => member.id == activeMember)}
+          member={familyMembers[activeMember - 1]}
+          updateMember={updateMember}
         />
         <HouseholdSummary />
       </main>
