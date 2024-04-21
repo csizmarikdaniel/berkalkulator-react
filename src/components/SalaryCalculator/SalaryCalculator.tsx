@@ -2,16 +2,9 @@ import React, { FC, useState } from "react";
 
 import Input from "./components/Input";
 import Toggle from "./components/Toggle";
-
-type Member = {
-  id: number;
-  name: string;
-  brutto: number;
-  szja: boolean;
-  friss_hazas: boolean;
-  szemelyi_kedvezmeny: boolean;
-  csaladi_kedvezmeny: boolean;
-};
+import { Member } from "../../types";
+import Slider from "./components/Slider";
+import Button from "./components/Button";
 
 const SalaryCalculator: FC<{
   member: Member;
@@ -23,12 +16,65 @@ const SalaryCalculator: FC<{
       <Input
         label="Bruttó bér"
         type="number"
-        defaultValue={member?.brutto}
+        value={member.brutto}
+        onChange={(e) =>
+          updateMember({
+            ...member,
+            brutto: isNaN(e.target.valueAsNumber) ? 0 : e.target.valueAsNumber,
+          })
+        }
+      />
+      <Slider
         value={member.brutto}
         onChange={(e) =>
           updateMember({ ...member, brutto: e.target.valueAsNumber })
         }
+        min={0}
+        max={1000000}
+        step={1}
       />
+      <div className="hidden">
+        <Button
+          onClick={() =>
+            updateMember({
+              ...member,
+              brutto: member.brutto - member.brutto * 0.05,
+            })
+          }
+        >
+          -5%
+        </Button>
+        <Button
+          onClick={() =>
+            updateMember({
+              ...member,
+              brutto: member.brutto - member.brutto * 0.01,
+            })
+          }
+        >
+          -1%
+        </Button>
+        <Button
+          onClick={() =>
+            updateMember({
+              ...member,
+              brutto: member.brutto + member.brutto * 0.01,
+            })
+          }
+        >
+          +1%
+        </Button>
+        <Button
+          onClick={() =>
+            updateMember({
+              ...member,
+              brutto: member.brutto + member.brutto * 0.05,
+            })
+          }
+        >
+          +5%
+        </Button>
+      </div>
       <Toggle
         label="25 éven aluliak SZJA kedvezménye"
         name="szja"
@@ -68,9 +114,6 @@ const SalaryCalculator: FC<{
           })
         }
       />
-      <button type="submit" className="btn">
-        Kalkuláció
-      </button>
     </form>
   );
 };

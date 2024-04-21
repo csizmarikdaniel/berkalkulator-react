@@ -4,6 +4,7 @@ import HouseholdSummary from "./HouseholdSummary/HouseholdSummary";
 import SalaryCalculator from "./SalaryCalculator/SalaryCalculator";
 import { useState } from "react";
 import { familyMembers as members } from "../../domain/familyMembers";
+import { CalculatedMember } from "../types";
 
 const HouseholdSalaryCalculator = () => {
   const [familyMembers, setFamilyMembers] = useState(members);
@@ -27,7 +28,6 @@ const HouseholdSalaryCalculator = () => {
       m.id === member.id ? member : m
     );
     setFamilyMembers(updatedMembers);
-    console.log(updatedMembers);
   };
   return (
     <>
@@ -39,12 +39,20 @@ const HouseholdSalaryCalculator = () => {
           setActiveMember={setActiveMember}
         />
       </header>
-      <main>
+      <main className="grid grid-cols-2">
         <SalaryCalculator
           member={familyMembers[activeMember - 1]}
           updateMember={updateMember}
         />
-        <HouseholdSummary />
+        <HouseholdSummary
+          members={familyMembers.map((member) => {
+            return {
+              id: member.id,
+              name: member.name,
+              netto: member.brutto,
+            } as CalculatedMember;
+          })}
+        />
       </main>
     </>
   );
