@@ -4,9 +4,9 @@ export const familyMembers = [
     name: "Tom",
     brutto: 3000,
     szja: false,
-    friss_hazas: true,
+    hazassag_datuma: new Date("2021-01-01"),
     szemelyi_kedvezmeny: false,
-    csaladi_kedvezmeny: false,
+    csaladi_kedvezmeny: undefined,
     netto: 0,
   },
   {
@@ -14,9 +14,9 @@ export const familyMembers = [
     name: "James",
     brutto: 4000,
     szja: false,
-    friss_hazas: false,
+    hazassag_datuma: new Date("2021-01-01"),
     szemelyi_kedvezmeny: false,
-    csaladi_kedvezmeny: false,
+    csaladi_kedvezmeny: undefined,
     netto: 0,
   },
 ];

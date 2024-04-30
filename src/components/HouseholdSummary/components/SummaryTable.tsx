@@ -1,7 +1,7 @@
 import React, { FC } from "react";
-import { CalculatedMember } from "../../../types";
+import { Member } from "../../../types";
 
-const SummaryTable: FC<{ members: CalculatedMember[] }> = ({ members }) => {
+const SummaryTable: FC<{ members: Member[] }> = ({ members }) => {
   return (
     <table className="table">
       <thead>

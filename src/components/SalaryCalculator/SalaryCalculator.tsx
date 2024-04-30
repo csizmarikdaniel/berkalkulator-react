@@ -6,14 +6,121 @@ import { Member } from "../../types";
 import Slider from "./components/Slider";
 import Button from "./components/Button";
 import ResultDisplay from "./components/ResultDisplay";
+import DateSelector from "./components/DateSelector";
+import _ from "lodash-es";
+import NumberIncrementInput from "./components/NumberIncrementInput";
 
 const SalaryCalculator: FC<{
   member: Member;
   updateMember: (member: Member) => void;
 }> = ({ member, updateMember }) => {
+  const [frissHazasChecked, setFrissHazasChecked] = useState(false);
+
+  const isFrissHazas = () => {
+    const temp = _.cloneDeep(member);
+    if (
+      temp.hazassag_datuma !== undefined &&
+      member.hazassag_datuma !== undefined
+    ) {
+      const tempDate = temp.hazassag_datuma;
+      const year = tempDate.getFullYear();
+      const newYear = year + 2;
+      tempDate.setFullYear(newYear);
+      if (
+        tempDate > new Date() &&
+        !(
+          member.hazassag_datuma.getFullYear() === new Date().getFullYear() &&
+          member.hazassag_datuma.getMonth() == new Date().getMonth()
+        ) &&
+        member.hazassag_datuma < new Date()
+      ) {
+        return true;
+      }
+      return false;
+    }
+    return undefined;
+  };
+
+  const handleFrissHazasCheck = () => {
+    setFrissHazasChecked(!frissHazasChecked);
+    if (!frissHazasChecked) {
+      updateMember({ ...member, hazassag_datuma: undefined });
+    }
+  };
+
+  const updateHazassagDatuma = (date: Date) => {
+    updateMember({ ...member, hazassag_datuma: date });
+  };
+
+  const handleCsaladiKedvezmenyCheck = () => {
+    if (member.csaladi_kedvezmeny === undefined) {
+      updateMember({
+        ...member,
+        csaladi_kedvezmeny: { eltartottak: 0, kedvezmenyezett: 0 },
+      });
+    } else {
+      updateMember({ ...member, csaladi_kedvezmeny: undefined });
+    }
+  };
+
+  const updateCsaladiKedvezmeny = (
+    eltartottak: number,
+    kedvezmenyezett: number
+  ) => {
+    if (eltartottak < 0 || kedvezmenyezett < 0 || kedvezmenyezett > eltartottak)
+      return;
+
+    updateMember({
+      ...member,
+      csaladi_kedvezmeny: { eltartottak, kedvezmenyezett },
+    });
+  };
+
+  const updateCalculation = () => {
+    const szja = member.brutto * 0.15;
+    const tb = member.brutto * 0.185;
+    member.netto = member.brutto - szja - tb;
+
+    if (member.szja && member.brutto < 499952) {
+      member.netto += szja;
+    }
+    if (member.szemelyi_kedvezmeny) {
+      member.netto +=
+        member.brutto - member.netto > 77300
+          ? 77300
+          : member.brutto - member.netto;
+    }
+
+    if (isFrissHazas()) {
+      member.netto += 5000;
+    }
+
+    if (member.csaladi_kedvezmeny !== undefined) {
+      switch (member.csaladi_kedvezmeny.kedvezmenyezett) {
+        case 0:
+          break;
+        case 1:
+          member.netto += 10000 * member.csaladi_kedvezmeny.eltartottak;
+          break;
+        case 2:
+          member.netto += 20000 * member.csaladi_kedvezmeny.eltartottak;
+          break;
+        default:
+          member.netto += 33000 * member.csaladi_kedvezmeny.eltartottak;
+          break;
+      }
+    }
+
+    return member.netto;
+  };
   return (
-    <form>
-      {member?.name} Bérének kiszámítása
+    <div>
+      {member?.name} bérének kiszámítása
+      <Input
+        label="Név"
+        value={member.name}
+        onChange={(e) => updateMember({ ...member, name: e.target.value })}
+      />
       <Input
         label="Bruttó bér"
         type="number"
@@ -85,15 +192,21 @@ const SalaryCalculator: FC<{
       <Toggle
         label="Friss házasok adókedvezménye"
         name="friss_hazas"
-        checked={member?.friss_hazas}
-        onChange={() =>
-          updateMember({
-            ...member,
-            friss_hazas: !member.friss_hazas,
-          })
-        }
+        checked={frissHazasChecked}
+        onChange={() => {
+          handleFrissHazasCheck();
+        }}
       />
-      {/* <DateSelector /> */}
+      {frissHazasChecked && (
+        <DateSelector
+          updateDate={updateHazassagDatuma}
+          jogosult={isFrissHazas()}
+        >
+          {member.hazassag_datuma === undefined
+            ? "Házasságkötés dátuma"
+            : new Date(member.hazassag_datuma).toLocaleDateString()}
+        </DateSelector>
+      )}
       <Toggle
         label="Személyi adókedvezmény"
         name="szemelyi_kedvezmeny"
@@ -108,19 +221,21 @@ const SalaryCalculator: FC<{
       <Toggle
         label="Családi kedvezmény"
         name="csaladi_kedvezmeny"
-        checked={member?.csaladi_kedvezmeny}
-        onChange={() =>
-          updateMember({
-            ...member,
-            csaladi_kedvezmeny: !member.csaladi_kedvezmeny,
-          })
-        }
+        checked={member.csaladi_kedvezmeny !== undefined}
+        onChange={() => handleCsaladiKedvezmenyCheck()}
       />
+      {member.csaladi_kedvezmeny !== undefined && (
+        <NumberIncrementInput
+          eltartotak={member.csaladi_kedvezmeny.eltartottak}
+          kedvezmenyezett={member.csaladi_kedvezmeny.kedvezmenyezett}
+          updateCsaladiKedvezmeny={updateCsaladiKedvezmeny}
+        />
+      )}
       <div>
         <h2>Nettó bér:</h2>
-        <ResultDisplay netto={member.netto} />
+        <ResultDisplay netto={updateCalculation()} />
       </div>
-    </form>
+    </div>
   );
 };
 

@@ -3,8 +3,10 @@ export type Member = {
   name: string;
   brutto: number;
   szja: boolean;
-  friss_hazas: boolean;
+  hazassag_datuma: Date | undefined;
   szemelyi_kedvezmeny: boolean;
-  csaladi_kedvezmeny: boolean;
+  csaladi_kedvezmeny:
+    | { eltartottak: number; kedvezmenyezett: number }
+    | undefined;
   netto: number;
 };
