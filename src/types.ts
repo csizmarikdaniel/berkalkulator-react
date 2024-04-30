@@ -6,10 +6,5 @@ export type Member = {
   friss_hazas: boolean;
   szemelyi_kedvezmeny: boolean;
   csaladi_kedvezmeny: boolean;
-};
-
-export type CalculatedMember = {
-  id: number;
-  name: string;
   netto: number;
 };

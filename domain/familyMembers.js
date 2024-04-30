@@ -7,6 +7,7 @@ export const familyMembers = [
     friss_hazas: true,
     szemelyi_kedvezmeny: false,
     csaladi_kedvezmeny: false,
+    netto: 0,
   },
   {
     id: 2,
@@ -16,5 +17,6 @@ export const familyMembers = [
     friss_hazas: false,
     szemelyi_kedvezmeny: false,
     csaladi_kedvezmeny: false,
+    netto: 0,
   },
 ];

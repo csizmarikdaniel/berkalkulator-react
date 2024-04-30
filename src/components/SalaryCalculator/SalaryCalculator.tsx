@@ -5,6 +5,7 @@ import Toggle from "./components/Toggle";
 import { Member } from "../../types";
 import Slider from "./components/Slider";
 import Button from "./components/Button";
+import ResultDisplay from "./components/ResultDisplay";
 
 const SalaryCalculator: FC<{
   member: Member;
@@ -92,6 +93,7 @@ const SalaryCalculator: FC<{
           })
         }
       />
+      {/* <DateSelector /> */}
       <Toggle
         label="Személyi adókedvezmény"
         name="szemelyi_kedvezmeny"
@@ -114,6 +116,10 @@ const SalaryCalculator: FC<{
           })
         }
       />
+      <div>
+        <h2>Nettó bér:</h2>
+        <ResultDisplay netto={member.netto} />
+      </div>
     </form>
   );
 };

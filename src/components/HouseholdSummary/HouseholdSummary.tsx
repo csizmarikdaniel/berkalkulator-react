@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 import SummaryTable from "./components/SummaryTable";
-import { CalculatedMember } from "../../types";
+import { Member } from "../../types";
 
-const HouseholdSummary: FC<{ members: CalculatedMember[] }> = ({ members }) => {
+const HouseholdSummary: FC<{ members: Member[] }> = ({ members }) => {
   return (
     <div>
       <h1>Háztartás összesített jövedelme</h1>

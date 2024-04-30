@@ -4,11 +4,11 @@ import HouseholdSummary from "./HouseholdSummary/HouseholdSummary";
 import SalaryCalculator from "./SalaryCalculator/SalaryCalculator";
 import { useState } from "react";
 import { familyMembers as members } from "../../domain/familyMembers";
-import { CalculatedMember } from "../types";
 
 const HouseholdSalaryCalculator = () => {
   const [familyMembers, setFamilyMembers] = useState(members);
   const [activeMember, setActiveMember] = useState(1);
+  familyMembers.map((m) => updateCalculation(m.id));
   const addNewMember = () => {
     const newMember = {
       id: familyMembers.length + 1,
@@ -18,6 +18,7 @@ const HouseholdSalaryCalculator = () => {
       friss_hazas: false,
       szemelyi_kedvezmeny: false,
       csaladi_kedvezmeny: false,
+      netto: 0,
     };
     setFamilyMembers([...familyMembers, newMember]);
     setActiveMember(newMember.id);
@@ -28,6 +29,24 @@ const HouseholdSalaryCalculator = () => {
       m.id === member.id ? member : m
     );
     setFamilyMembers(updatedMembers);
+    updateCalculation(member.id);
+  };
+
+  const updateCalculation = (id) => {
+    const member = familyMembers.find((m) => m.id === id) ?? familyMembers[0];
+    const szja = member.brutto * 0.15;
+    const tb = member.brutto * 0.185;
+    member.netto = member.brutto - szja - tb;
+
+    if (member.szja && member.brutto < 499952) {
+      member.netto += szja;
+    }
+    if (member.szemelyi_kedvezmeny) {
+      member.netto +=
+        member.brutto - member.netto > 77300
+          ? 77300
+          : member.brutto - member.netto;
+    }
   };
   return (
     <>
@@ -44,15 +63,7 @@ const HouseholdSalaryCalculator = () => {
           member={familyMembers[activeMember - 1]}
           updateMember={updateMember}
         />
-        <HouseholdSummary
-          members={familyMembers.map((member) => {
-            return {
-              id: member.id,
-              name: member.name,
-              netto: member.brutto,
-            } as CalculatedMember;
-          })}
-        />
+        <HouseholdSummary members={familyMembers} />
       </main>
     </>
   );
