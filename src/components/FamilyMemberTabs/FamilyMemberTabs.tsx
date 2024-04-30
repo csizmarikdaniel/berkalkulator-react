@@ -11,16 +11,16 @@ type FamilyMember = {
 
 const FamilyMemberTabs: FC<{
   members: FamilyMember[];
-  activeMember: number;
+  activeMemberId: number;
   addNewMember: () => void;
-  setActiveMember: (member: number) => void;
-}> = ({ members, activeMember, addNewMember, setActiveMember }) => {
+  setActiveMember: (memberId: number) => void;
+}> = ({ members, activeMemberId, addNewMember, setActiveMember }) => {
   return (
     <div>
       <TabContainer>
         {members.map((member) => (
           <div onClick={() => setActiveMember(member.id)} key={member.id}>
-            <Tab active={activeMember == member.id}>{member.name}</Tab>
+            <Tab active={activeMemberId == member.id}>{member.name}</Tab>
           </div>
         ))}
         <AddNewButton addNewTab={addNewMember} />

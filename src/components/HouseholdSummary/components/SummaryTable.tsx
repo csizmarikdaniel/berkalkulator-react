@@ -1,7 +1,10 @@
 import React, { FC } from "react";
 import { Member } from "../../../types";
 
-const SummaryTable: FC<{ members: Member[] }> = ({ members }) => {
+const SummaryTable: FC<{
+  members: Member[];
+  setActiveMemberId: (memberId: number) => void;
+}> = ({ members, setActiveMemberId }) => {
   return (
     <table className="table">
       <thead>
@@ -11,12 +14,20 @@ const SummaryTable: FC<{ members: Member[] }> = ({ members }) => {
         </tr>
       </thead>
       <tbody>
-        {members.map((member, index) => (
-          <tr key={index}>
+        {members.map((member) => (
+          <tr
+            key={member.id}
+            onClick={() => setActiveMemberId(member.id)}
+            className="hover"
+          >
             <td>{member.name}</td>
             <td>{member.netto}</td>
           </tr>
         ))}
+        <tr>
+          <td>Összesen</td>
+          <td>{members.reduce((sum, member) => sum + member.netto, 0)}</td>
+        </tr>
       </tbody>
     </table>
   );

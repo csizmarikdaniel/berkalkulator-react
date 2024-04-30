@@ -8,12 +8,13 @@ import { Member } from "../types";
 
 const HouseholdSalaryCalculator = () => {
   const [familyMembers, setFamilyMembers] = useState<Member[]>(members);
-  const [activeMember, setActiveMember] = useState(1);
+  const [activeMemberId, setActiveMemberId] = useState(1);
 
+  const [lastId, setLastId] = useState(familyMembers.length + 1);
   const addNewMember = () => {
     const newMember = {
-      id: familyMembers.length + 1,
-      name: `Tag ${familyMembers.length + 1}`,
+      id: lastId,
+      name: `Tag ${lastId}`,
       brutto: 0,
       szja: false,
       hazassag_datuma: undefined,
@@ -22,7 +23,8 @@ const HouseholdSalaryCalculator = () => {
       netto: 0,
     };
     setFamilyMembers([...familyMembers, newMember]);
-    setActiveMember(newMember.id);
+    setActiveMemberId(newMember.id);
+    setLastId(lastId + 1);
   };
 
   const updateMember = (member) => {
@@ -37,17 +39,29 @@ const HouseholdSalaryCalculator = () => {
       <header>
         <FamilyMemberTabs
           members={familyMembers}
-          activeMember={activeMember}
+          activeMemberId={activeMemberId}
           addNewMember={() => addNewMember()}
-          setActiveMember={setActiveMember}
+          setActiveMember={setActiveMemberId}
         />
       </header>
       <main className="grid grid-cols-2">
         <SalaryCalculator
-          member={familyMembers[activeMember - 1]}
+          member={
+            familyMembers.find((member) => member.id === activeMemberId) ??
+            familyMembers[0]
+          }
           updateMember={updateMember}
+          deleteMember={(id) => {
+            setFamilyMembers(
+              familyMembers.filter((member) => member.id !== id)
+            );
+            setActiveMemberId(familyMembers[0].id);
+          }}
         />
-        <HouseholdSummary members={familyMembers} />
+        <HouseholdSummary
+          members={familyMembers}
+          setActiveMemberId={setActiveMemberId}
+        />
       </main>
     </>
   );

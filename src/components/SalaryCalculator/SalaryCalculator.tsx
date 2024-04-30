@@ -9,11 +9,13 @@ import ResultDisplay from "./components/ResultDisplay";
 import DateSelector from "./components/DateSelector";
 import _ from "lodash-es";
 import NumberIncrementInput from "./components/NumberIncrementInput";
+import DeleteButton from "./components/DeleteButton";
 
 const SalaryCalculator: FC<{
   member: Member;
   updateMember: (member: Member) => void;
-}> = ({ member, updateMember }) => {
+  deleteMember: (id: number) => void;
+}> = ({ member, updateMember, deleteMember }) => {
   const [frissHazasChecked, setFrissHazasChecked] = useState(false);
 
   const isFrissHazas = () => {
@@ -81,8 +83,10 @@ const SalaryCalculator: FC<{
     const tb = member.brutto * 0.185;
     member.netto = member.brutto - szja - tb;
 
-    if (member.szja && member.brutto < 499952) {
+    if (member.szja && member.brutto <= 499952) {
       member.netto += szja;
+    } else if (member.szja && member.brutto > 499952) {
+      member.netto += szja - (member.brutto - 499952) * 0.15;
     }
     if (member.szemelyi_kedvezmeny) {
       member.netto +=
@@ -110,12 +114,13 @@ const SalaryCalculator: FC<{
           break;
       }
     }
-
+    member.netto = Math.round(member.netto);
     return member.netto;
   };
   return (
     <div>
       {member?.name} bérének kiszámítása
+      <DeleteButton onClick={() => deleteMember(member.id)} />
       <Input
         label="Név"
         value={member.name}
