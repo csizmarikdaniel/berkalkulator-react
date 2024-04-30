@@ -23,6 +23,7 @@ const DateSelectorModal: FC<{
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
+            error={moment(date).isValid() ? "" : "Helytelen dátum"}
           />
           <div className="mt-6 flex justify-end gap-4">
             <button type="button" onClick={onClose} className="btn">

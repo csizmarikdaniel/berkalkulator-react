@@ -118,13 +118,19 @@ const SalaryCalculator: FC<{
     return member.netto;
   };
   return (
-    <div>
-      {member?.name} bérének kiszámítása
-      <DeleteButton onClick={() => deleteMember(member.id)} />
+    <div className="bg-slate-200 rounded-md m-3 p-3 relative">
+      <h2 className="text-center text-xl">
+        <span className="font-bold">{member?.name}</span> bérének kiszámítása
+      </h2>
+      <DeleteButton
+        onClick={() => deleteMember(member.id)}
+        className="absolute right-3 top-3"
+      />
       <Input
         label="Név"
         value={member.name}
         onChange={(e) => updateMember({ ...member, name: e.target.value })}
+        error={member.name === "" ? "Add meg a családtag nevét!" : undefined}
       />
       <Input
         label="Bruttó bér"
@@ -137,107 +143,111 @@ const SalaryCalculator: FC<{
           })
         }
       />
-      <Slider
-        value={member.brutto}
-        onChange={(e) =>
-          updateMember({ ...member, brutto: e.target.valueAsNumber })
-        }
-        min={0}
-        max={1000000}
-        step={1}
-      />
-      <div className="hidden">
-        <Button
-          onClick={() =>
-            updateMember({
-              ...member,
-              brutto: member.brutto - member.brutto * 0.05,
-            })
+      <div className="flex flex-col my-5">
+        <Slider
+          value={member.brutto}
+          onChange={(e) =>
+            updateMember({ ...member, brutto: e.target.valueAsNumber })
           }
-        >
-          -5%
-        </Button>
-        <Button
-          onClick={() =>
-            updateMember({
-              ...member,
-              brutto: member.brutto - member.brutto * 0.01,
-            })
-          }
-        >
-          -1%
-        </Button>
-        <Button
-          onClick={() =>
-            updateMember({
-              ...member,
-              brutto: member.brutto + member.brutto * 0.01,
-            })
-          }
-        >
-          +1%
-        </Button>
-        <Button
-          onClick={() =>
-            updateMember({
-              ...member,
-              brutto: member.brutto + member.brutto * 0.05,
-            })
-          }
-        >
-          +5%
-        </Button>
-      </div>
-      <Toggle
-        label="25 éven aluliak SZJA kedvezménye"
-        name="szja"
-        checked={member.szja}
-        onChange={() => updateMember({ ...member, szja: !member.szja })}
-      />
-      <Toggle
-        label="Friss házasok adókedvezménye"
-        name="friss_hazas"
-        checked={frissHazasChecked}
-        onChange={() => {
-          handleFrissHazasCheck();
-        }}
-      />
-      {frissHazasChecked && (
-        <DateSelector
-          updateDate={updateHazassagDatuma}
-          jogosult={isFrissHazas()}
-        >
-          {member.hazassag_datuma === undefined
-            ? "Házasságkötés dátuma"
-            : new Date(member.hazassag_datuma).toLocaleDateString()}
-        </DateSelector>
-      )}
-      <Toggle
-        label="Személyi adókedvezmény"
-        name="szemelyi_kedvezmeny"
-        checked={member?.szemelyi_kedvezmeny}
-        onChange={() =>
-          updateMember({
-            ...member,
-            szemelyi_kedvezmeny: !member.szemelyi_kedvezmeny,
-          })
-        }
-      />
-      <Toggle
-        label="Családi kedvezmény"
-        name="csaladi_kedvezmeny"
-        checked={member.csaladi_kedvezmeny !== undefined}
-        onChange={() => handleCsaladiKedvezmenyCheck()}
-      />
-      {member.csaladi_kedvezmeny !== undefined && (
-        <NumberIncrementInput
-          eltartotak={member.csaladi_kedvezmeny.eltartottak}
-          kedvezmenyezett={member.csaladi_kedvezmeny.kedvezmenyezett}
-          updateCsaladiKedvezmeny={updateCsaladiKedvezmeny}
+          min={0}
+          max={1000000}
+          step={1}
         />
-      )}
-      <div>
-        <h2>Nettó bér:</h2>
+        <div className="flex gap-2 mx-auto">
+          <Button
+            onClick={() =>
+              updateMember({
+                ...member,
+                brutto: Math.round(member.brutto - member.brutto * 0.05),
+              })
+            }
+          >
+            -5%
+          </Button>
+          <Button
+            onClick={() =>
+              updateMember({
+                ...member,
+                brutto: Math.round(member.brutto - member.brutto * 0.01),
+              })
+            }
+          >
+            -1%
+          </Button>
+          <Button
+            onClick={() =>
+              updateMember({
+                ...member,
+                brutto: Math.round(member.brutto + member.brutto * 0.01),
+              })
+            }
+          >
+            +1%
+          </Button>
+          <Button
+            onClick={() =>
+              updateMember({
+                ...member,
+                brutto: Math.round(member.brutto + member.brutto * 0.05),
+              })
+            }
+          >
+            +5%
+          </Button>
+        </div>
+      </div>
+      <div className="flex flex-col gap-3">
+        <Toggle
+          label="25 éven aluliak SZJA kedvezménye"
+          name="szja"
+          checked={member.szja}
+          onChange={() => updateMember({ ...member, szja: !member.szja })}
+        />
+        <Toggle
+          label="Friss házasok adókedvezménye"
+          name="friss_hazas"
+          checked={frissHazasChecked}
+          onChange={() => {
+            handleFrissHazasCheck();
+          }}
+        />
+        {frissHazasChecked && (
+          <DateSelector
+            updateDate={updateHazassagDatuma}
+            jogosult={isFrissHazas()}
+          >
+            {member.hazassag_datuma === undefined
+              ? "Házasságkötés dátuma"
+              : new Date(member.hazassag_datuma).toLocaleDateString()}
+          </DateSelector>
+        )}
+        <Toggle
+          label="Személyi adókedvezmény"
+          name="szemelyi_kedvezmeny"
+          checked={member?.szemelyi_kedvezmeny}
+          onChange={() =>
+            updateMember({
+              ...member,
+              szemelyi_kedvezmeny: !member.szemelyi_kedvezmeny,
+            })
+          }
+        />
+        <Toggle
+          label="Családi kedvezmény"
+          name="csaladi_kedvezmeny"
+          checked={member.csaladi_kedvezmeny !== undefined}
+          onChange={() => handleCsaladiKedvezmenyCheck()}
+        />
+        {member.csaladi_kedvezmeny !== undefined && (
+          <NumberIncrementInput
+            eltartotak={member.csaladi_kedvezmeny.eltartottak}
+            kedvezmenyezett={member.csaladi_kedvezmeny.kedvezmenyezett}
+            updateCsaladiKedvezmeny={updateCsaladiKedvezmeny}
+          />
+        )}
+      </div>
+      <div className="mt-3">
+        <h2 className="text-center text-xl">Nettó bér:</h2>
         <ResultDisplay netto={updateCalculation()} />
       </div>
     </div>

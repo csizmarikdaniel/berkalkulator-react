@@ -7,8 +7,10 @@ const HouseholdSummary: FC<{
   setActiveMemberId: (memberId: number) => void;
 }> = ({ members, setActiveMemberId }) => {
   return (
-    <div>
-      <h1>Háztartás összesített jövedelme</h1>
+    <div className="bg-slate-200 rounded-md m-3 p-3">
+      <h2 className="text-center text-2xl mb-5">
+        Háztartás összesített jövedelme
+      </h2>
       <SummaryTable members={members} setActiveMemberId={setActiveMemberId} />
     </div>
   );

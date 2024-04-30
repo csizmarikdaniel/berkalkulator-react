@@ -6,9 +6,9 @@ type ToggleProps = React.InputHTMLAttributes<HTMLInputElement> & {
 
 const Toggle: FC<ToggleProps> = ({ label, name, ...props }) => {
   return (
-    <div>
-      <label htmlFor={name}>{label}</label>
+    <div className="flex gap-2">
       <input type="checkbox" className="toggle" {...props} />
+      <label htmlFor={name}>{label}</label>
     </div>
   );
 };

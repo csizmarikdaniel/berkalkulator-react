@@ -6,7 +6,7 @@ const SummaryTable: FC<{
   setActiveMemberId: (memberId: number) => void;
 }> = ({ members, setActiveMemberId }) => {
   return (
-    <table className="table">
+    <table className="table bg-white">
       <thead>
         <tr>
           <th>Név</th>
